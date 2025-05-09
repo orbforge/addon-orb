@@ -60,6 +60,11 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           tags: >
             orbforge/orb-ha:${{ env.DOCKER_VERSION }}
+
+      - uses: actions/checkout@v4
+        if: ${{ github.event_name == 'push' && github.ref_type == 'tag' }}
+        with:
+          ref: main
       - name: Update GH repository
         if: ${{ github.event_name == 'push' && github.ref_type == 'tag' }}
         run: |
