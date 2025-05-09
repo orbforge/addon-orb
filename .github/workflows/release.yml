@@ -60,3 +60,13 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           tags: >
             orbforge/orb-ha:${{ env.DOCKER_VERSION }}
+      - name: Update GH repository
+        if: ${{ github.event_name == 'push' && github.ref_type == 'tag' }}
+        run: |
+          sed -i '' "s/^version: \".*\"/version: \"${{ env.DOCKER_VERSION }}\"/" config.yaml
+
+          git config --local user.name "GitHub Action"
+          git config --local user.email "packages@orb.net"
+          git add config.yaml
+          git commit -m "Update version to ${{ env.DOCKER_VERSION }}"
+          git push origin main
