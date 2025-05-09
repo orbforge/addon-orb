@@ -1,3 +1,4 @@
+ARG DOCKER_VERSION="latest"
 FROM orbforge/orb:${DOCKER_VERSION}
 
 # Install mosquitto_pub/sub via system package manager
