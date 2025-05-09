@@ -4,7 +4,7 @@ version: "1.0.1"
 slug: "orb_homeassistant"
 init: false
 host_network: true
-image: "orbforge/orb"
+image: "orbforge/orb-ha"
 environment:
  ORB_DATA_DIR: /data
 arch:
