@@ -54,7 +54,7 @@ jobs:
         with:
           context: docker
           platforms: linux/amd64,linux/arm64,linux/arm/v7
-          push: true
+          push: ${{ github.event_name == 'push' && github.ref_type == 'tag' }}
           provenance: mode=max
           build-args: DOCKER_VERSION=${{ env.DOCKER_VERSION }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -63,7 +63,7 @@ jobs:
       - name: Update GH repository
         if: ${{ github.event_name == 'push' && github.ref_type == 'tag' }}
         run: |
-          sed -i '' "s/^version: \".*\"/version: \"${{ env.DOCKER_VERSION }}\"/" config.yaml
+          sed -i 's/^version: \".*\"/version: \"${{ env.DOCKER_VERSION }}\"/' config.yaml
 
           git config --local user.name "GitHub Action"
           git config --local user.email "packages@orb.net"
