@@ -17,18 +17,21 @@ This add-on runs an [Orb](https://www.orb.net) sensor in your Home Assistant env
 
 ## Configuration
 
-This add-on doesn't require any configuration. It automatically connects to your Orb devices on the network.
+The add-on allows configuration of the MQTT push functionality. 
+* **Push Scores to MQTT** (default false): Enabling this will have the orb sensor push its status to the Home Assistant MQTT broker
+* **MQTT Frequency** (default 5 seconds): This determines how often the orb sensor will push its status, if the functionality is enabled
+
 
 ## Data Storage
 
-The add-on stores its data in `/root/.config/orb` which is configured as persistent storage.
+The add-on stores its data in `/data/.config/orb` which is the default persistent storage provided by Home Assistant
 
 ## Architecture Support
 
 This add-on supports multiple architectures (aarch64, amd64, armv7).
 
 ## MQTT Integration
-If you have the [MQTT addon](https://www.home-assistant.io/integrations/mqtt/) installed, the Orb addon will automatically detect the endpoin. Configure the Orb Sensor device and start pushing the current orb status.
+If you have the [MQTT addon](https://www.home-assistant.io/integrations/mqtt/) installed, the Orb addon will automatically detect the endpoint. Configure the Orb sensor device and start pushing the current orb status.
 
 It will expose the following entities under the Orb Sensor device:
 
