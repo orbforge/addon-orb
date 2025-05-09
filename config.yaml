@@ -4,7 +4,7 @@ version: "1.0.1"
 slug: "orb_homeassistant"
 init: false
 host_network: true
-image: "orbforge/orb"
+image: "orbforge/orb-ha"
 environment:
  ORB_DATA_DIR: /data
 arch:
@@ -14,3 +14,9 @@ arch:
 boot: auto
 services:
   - mqtt:need
+options:
+  mqtt_push: false
+  mqtt_frequency: 5
+schema:
+  mqtt_push: bool
+  mqtt_frequency: int(1,120)
