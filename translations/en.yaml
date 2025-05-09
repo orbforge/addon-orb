@@ -1,0 +1,11 @@
+---
+configuration:
+  mqtt_push:
+    name: Push Scores to MQTT
+    description: >-
+      If set to `true`, the Orb will push scores to the MQTT broker.
+  mqtt_frequency:
+    name: MQTT Frequency
+    description: >-
+      The frequency in seconds at which the Orb will push scores to the MQTT
+      broker.

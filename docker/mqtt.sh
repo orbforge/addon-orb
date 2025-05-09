@@ -10,6 +10,9 @@ MQTT_PORT=$(echo "$MQTT_INFO" | jq -r '.data.port')
 MQTT_USER=$(echo "$MQTT_INFO" | jq -r '.data.username')
 MQTT_PASS=$(echo "$MQTT_INFO" | jq -r '.data.password')
 
+CONFIG_PATH=/data/options.json
+MQTT_PAUSE=$(jq -r '.mqtt_frequency // 5' $CONFIG_PATH)
+
 echo "MQTT Host: $MQTT_HOST"
 echo "MQTT Port: $MQTT_PORT"
 echo "MQTT User: $MQTT_USER"
@@ -82,5 +85,5 @@ while true; do
   mosquitto_pub -h "$MQTT_HOST" -p "$MQTT_PORT" -u "$MQTT_USER" -P "$MQTT_PASS" \
     -t "$STATE_TOPIC" -m "$ORB_OUTPUT" -r
 
-  sleep 15
+  sleep "$MQTT_PAUSE"
 done

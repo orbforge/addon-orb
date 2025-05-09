@@ -14,3 +14,9 @@ arch:
 boot: auto
 services:
   - mqtt:need
+options:
+  mqtt_push: false
+  mqtt_frequency: 5
+schema:
+  mqtt_push: bool
+  mqtt_frequency: int(1,120)
