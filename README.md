@@ -26,3 +26,17 @@ The add-on stores its data in `/root/.config/orb` which is configured as persist
 ## Architecture Support
 
 This add-on supports multiple architectures (aarch64, amd64, armv7).
+
+## MQTT Integration
+If you have the [MQTT addon](https://www.home-assistant.io/integrations/mqtt/) installed, the Orb addon will automatically detect the endpoin. Configure the Orb Sensor device and start pushing the current orb status.
+
+It will expose the following entities under the Orb Sensor device:
+
+- Orb Score (overall)
+- Bandwidth Score
+- Reliability Score
+- Responsiveness Score
+- Bandwidth Upload
+- Bandwidth Download
+- Lag
+- Packet Loss
