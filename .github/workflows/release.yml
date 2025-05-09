@@ -1,0 +1,77 @@
+name: Orb HA Release
+env:
+  GOPRIVATE: github.com/orbforge
+
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+" # ie: v0.0.0
+      - "v[0-9]+.[0-9]+.[0-9]+-*" # ie: v0.0.0-rc1
+    branches:
+      - "packaging-work"
+
+permissions:
+  id-token: write
+  contents: write
+
+jobs:
+  build-image:
+    name: initial
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Env variables for tag push
+        if: ${{ github.event_name == 'push' && github.ref_type == 'tag' }}
+        run: |
+          DOCKER_VERSION="${{ github.ref_name }}"
+          echo "DOCKER_VERSION=${DOCKER_VERSION#v}" >> "$GITHUB_ENV"
+
+      - name: Env variables for main branch push
+        if: ${{ github.event_name == 'push' && github.ref_type == 'branch' }}
+        run: |
+          echo "DOCKER_VERSION=1.0.0" >> "$GITHUB_ENV"
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: orbforge
+          password: ${{ secrets.DOCKERHUB_ORG_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          platforms: linux/amd64,linux/arm64,linux/arm/v7
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: orbforge/orb
+
+      - name: Docker build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: docker
+          platforms: linux/amd64,linux/arm64,linux/arm/v7
+          push: ${{ github.event_name == 'push' && github.ref_type == 'tag' }}
+          provenance: mode=max
+          build-args: DOCKER_VERSION=${{ env.DOCKER_VERSION }}
+          labels: ${{ steps.meta.outputs.labels }}
+          tags: >
+            orbforge/orb-ha:${{ env.DOCKER_VERSION }}
+
+      - uses: actions/checkout@v4
+        if: ${{ github.event_name == 'push' && github.ref_type == 'tag' }}
+        with:
+          ref: main
+      - name: Update GH repository
+        if: ${{ github.event_name == 'push' && github.ref_type == 'tag' }}
+        run: |
+          sed -i 's/^version: \".*\"/version: \"${{ env.DOCKER_VERSION }}\"/' config.yaml
+
+          git config --local user.name "GitHub Action"
+          git config --local user.email "packages@orb.net"
+          git add config.yaml
+          git commit -m "Update version to ${{ env.DOCKER_VERSION }}"
+          git push origin main
