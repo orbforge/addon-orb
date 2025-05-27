@@ -50,6 +50,7 @@ echo "$mapping" | while IFS='|' read name field unit; do
   DISCOVERY_TOPIC="${DISCOVERY_TOPIC_PREFIX}/orb_${unique_id}/config"
 
 
+if ! echo "$name" | grep -q Bandwidth; then
   payload=$(cat <<EOF
 {
   "name": "${name}",
@@ -66,6 +67,24 @@ echo "$mapping" | while IFS='|' read name field unit; do
 }
 EOF
 )
+else
+  payload=$(cat <<EOF
+{
+  "name": "${name}",
+  "state_topic": "orb_homeassistant/status",
+  "unit_of_measurement": "${unit}",
+  "value_template": "{% if value_json.orb_score.components.bandwidth_score.included %} {{ value_json.${field} | round(0) }} {% endif %}",
+  "unique_id": "${unique_id}",
+  "device": {
+    "identifiers": ["orb"],
+    "name": "Orb Sensor",
+    "manufacturer": "Orb Forge",
+    "model": "Orb Agent"
+  }
+}
+EOF
+)
+fi
 
   mosquitto_pub -h "$MQTT_HOST" -p "$MQTT_PORT" -u "$MQTT_USER" -P "$MQTT_PASS" \
     -t "$DISCOVERY_TOPIC" \
