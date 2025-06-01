@@ -38,7 +38,7 @@ Bandwidth Upload|orb_score.components.bandwidth_score.components.upload_bandwidt
 Bandwidth Download|orb_score.components.bandwidth_score.components.download_bandwidth_kbps.value|kbps
 Reliability Score|orb_score.components.reliability_score.display|%
 Lag|orb_score.components.responsiveness_score.components.internet_lag_us.value|us
-Packet Loss|orb_score.components.reliability_score.components.internet_loss_status.value|
+Packet Loss|orb_score.components.reliability_score.components.internet_loss_status.value|%
 Responsiveness Score|orb_score.components.responsiveness_score.display|%
 "
 
