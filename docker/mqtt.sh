@@ -19,11 +19,13 @@ echo "MQTT User: $MQTT_USER"
 
 if [ -z "$MQTT_HOST" ] || [ -z "$MQTT_PORT" ] || [ -z "$MQTT_USER" ] || [ -z "$MQTT_PASS" ]; then
   echo "Error: Missing MQTT configuration"
+  echo "Ensure that the MQTT integration is installed and running. https://www.home-assistant.io/integrations/mqtt/"
   exit 1
 fi
 
 if [ "$MQTT_HOST" == "null" ] || [ "$MQTT_PORT" == "null" ] || [ "$MQTT_USER" == "null" ] || [ "$MQTT_PASS" == "null" ]; then
   echo "Error: Missing MQTT configuration"
+  echo "Ensure that the MQTT integration is installed and running. https://www.home-assistant.io/integrations/mqtt/"
   exit 1
 fi
 
