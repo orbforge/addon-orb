@@ -1,5 +1,10 @@
 # Changelog
 
+# 1.1.0
+- Cross-Verified Responsiveness measurement - uses multiple independent sources to improve accuracy and catch inconsistencies
+- New Responsiveness measurement protocol support enables more accurate and robust measurement that is more aligned with real internet experience
+- Refined packet loss detection reduces noise and more accurately indicates connection issues
+
 # 1.0.9
 - Redefine orb_score in orb summary response as the most recent populated timeframe of each component (Responsiveness, Reliability, and Speed)
 
