@@ -1,5 +1,8 @@
 # Changelog
 
+# 1.1.1
+- Pinger/Packet loss bug fixes
+
 # 1.1.0
 - Cross-Verified Responsiveness measurement - uses multiple independent sources to improve accuracy and catch inconsistencies
 - New Responsiveness measurement protocol support enables more accurate and robust measurement that is more aligned with real internet experience
