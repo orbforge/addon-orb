@@ -1,5 +1,13 @@
 # Changelog
 
+# 1.2.0
+- Scoring improvements: Reliability and Speed will affect your overall Orb Score a bit differently than before.
+    - Reliability will only impact your score in cases of outages or disruptions, and we now include the most recent speed test even if it happened before the time period you are viewing. You may notice your score is a bit lower than before, but it is more representative of your actual Internet experience.
+- Support for configurable speed testing
+- Support reporting time-to-first-byte and dns resolve time in apps
+- Enhancement: improved accuracy of responsiveness measurements
+- Bug fixes and optimizations (as always).
+
 # 1.1.1
 - Pinger/Packet loss bug fixes
 
