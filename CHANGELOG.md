@@ -1,4 +1,14 @@
 # Changelog
+# 1.3.0
+- Bug fixes and optimizations
+- Support for Orb app 1.3 features
+
+# 1.2.2
+- Bug fixes and optimizations
+
+# 1.2.1
+- Bug: Fixed a bug where lag would spike incorrectly at launch in some edge cases
+- Minor bug fixes and optimizations
 
 # 1.2.0
 - Scoring improvements: Reliability and Speed will affect your overall Orb Score a bit differently than before.
