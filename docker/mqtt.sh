@@ -56,6 +56,7 @@ echo "$mapping" | while IFS='|' read name field unit; do
 {
   "name": "${name}",
   "state_topic": "orb_homeassistant/status",
+  "state_class": "measurement",
   "unit_of_measurement": "${unit}",
   "value_template": "{{ (value_json.${field}) | round(0) }}",
   "unique_id": "${unique_id}",
