@@ -1,7 +1,13 @@
 # Changelog
+# 1.3.1
+- Fix potential disconnected startup failure cases
+- Fix rare latency measurement beyond timeout
+- Bug fixes and optimizations
+- Local Analytics: https://orb.net/blog/introducing-local-api
+
 # 1.3.0
 - Bug fixes and optimizations
-- Support for Orb app 1.3 features
+- Support for Orb app 1.3 features: https://orb.net/blog/whats-new-in-orb-1.3
 
 # 1.2.2
 - Bug fixes and optimizations
