@@ -55,6 +55,7 @@ echo "$mapping" | while IFS='|' read name field unit; do
   payload=$(cat <<EOF
 {
   "name": "${name}",
+  "state_class": "measurement",
   "state_topic": "orb_homeassistant/status",
   "unit_of_measurement": "${unit}",
   "value_template": "{{ (value_json.${field}) | round(0) }}",
