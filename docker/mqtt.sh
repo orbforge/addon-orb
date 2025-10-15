@@ -75,6 +75,15 @@ EOF
     -r 
 done
 
+CLEANUP_ENTITIES="high_packet_loss_proportion packet_loss"
+for entity in $CLEANUP_ENTITIES; do
+  DISCOVERY_TOPIC="${DISCOVERY_TOPIC_PREFIX}/orb_${entity}/config"
+  mosquitto_pub -h "$MQTT_HOST" -p "$MQTT_PORT" -u "$MQTT_USER" -P "$MQTT_PASS" \
+    -t "$DISCOVERY_TOPIC" \
+    -n \
+    -r 
+done
+
 set +x
 
 # Periodic state updates
