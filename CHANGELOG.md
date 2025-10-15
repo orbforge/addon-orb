@@ -1,4 +1,10 @@
 # Changelog
+# 1.3.3
+- Add state_class: measurement to have long term statistics. Thanks @tronikos
+- Remove high packet loss proportion from MQTT script, since it's no longer available in the orb summary and was causing errors inside Home Assistant
+- Improved Router Lag measurement
+- Bug fixes and optimizations
+
 # 1.3.1
 - Fix potential disconnected startup failure cases
 - Fix rare latency measurement beyond timeout
