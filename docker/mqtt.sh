@@ -40,7 +40,6 @@ Bandwidth Upload|orb_score.components.bandwidth_score.components.upload_bandwidt
 Bandwidth Download|orb_score.components.bandwidth_score.components.download_bandwidth_kbps.value|kbps
 Reliability Score|orb_score.components.reliability_score.display|%
 Lag|orb_score.components.responsiveness_score.components.internet_lag_us.value|us
-High Packet Loss Proportion|orb_score.components.reliability_score.components.internet_loss_status.value * 100|%
 Responsiveness Score|orb_score.components.responsiveness_score.display|%
 "
 
@@ -73,6 +72,15 @@ EOF
   mosquitto_pub -h "$MQTT_HOST" -p "$MQTT_PORT" -u "$MQTT_USER" -P "$MQTT_PASS" \
     -t "$DISCOVERY_TOPIC" \
     -m "$payload" \
+    -r 
+done
+
+CLEANUP_ENTITIES="high_packet_loss_proportion packet_loss"
+for entity in $CLEANUP_ENTITIES; do
+  DISCOVERY_TOPIC="${DISCOVERY_TOPIC_PREFIX}/orb_${entity}/config"
+  mosquitto_pub -h "$MQTT_HOST" -p "$MQTT_PORT" -u "$MQTT_USER" -P "$MQTT_PASS" \
+    -t "$DISCOVERY_TOPIC" \
+    -n \
     -r 
 done
 
