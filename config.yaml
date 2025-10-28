@@ -20,3 +20,7 @@ options:
 schema:
   mqtt_push: bool
   mqtt_frequency: int(1,120)
+  mqtt_host: str?
+  mqtt_port: port?
+  mqtt_user: str?
+  mqtt_password: password?

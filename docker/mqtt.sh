@@ -3,15 +3,26 @@
 set -x
 
 AUTH_HEADER="Authorization: Bearer ${SUPERVISOR_TOKEN}"
-MQTT_INFO=$(curl -s -H "$AUTH_HEADER" http://supervisor/services/mqtt)
-
-MQTT_HOST=$(echo "$MQTT_INFO" | jq -r '.data.host')
-MQTT_PORT=$(echo "$MQTT_INFO" | jq -r '.data.port')
-MQTT_USER=$(echo "$MQTT_INFO" | jq -r '.data.username')
-MQTT_PASS=$(echo "$MQTT_INFO" | jq -r '.data.password')
 
 CONFIG_PATH=/data/options.json
 MQTT_PAUSE=$(jq -r '.mqtt_frequency // 5' $CONFIG_PATH)
+MQTT_HOST=$(jq -r '.mqtt_host // empty' $CONFIG_PATH)
+
+if [ -n "$MQTT_HOST" ]; then
+  echo "Using user-defined MQTT configuration"
+  MQTT_PORT=$(jq -r '.mqtt_port // 1883' $CONFIG_PATH)
+  MQTT_USER=$(jq -r '.mqtt_user // empty' $CONFIG_PATH)
+  MQTT_PASS=$(jq -r '.mqtt_password // empty' $CONFIG_PATH)
+else
+  echo "Using Supervisor MQTT configuration"
+
+  MQTT_INFO=$(curl -s -H "$AUTH_HEADER" http://supervisor/services/mqtt)
+
+  MQTT_HOST=$(echo "$MQTT_INFO" | jq -r '.data.host')
+  MQTT_PORT=$(echo "$MQTT_INFO" | jq -r '.data.port')
+  MQTT_USER=$(echo "$MQTT_INFO" | jq -r '.data.username')
+  MQTT_PASS=$(echo "$MQTT_INFO" | jq -r '.data.password')
+fi
 
 echo "MQTT Host: $MQTT_HOST"
 echo "MQTT Port: $MQTT_PORT"

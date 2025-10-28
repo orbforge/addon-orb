@@ -9,3 +9,19 @@ configuration:
     description: >-
       The frequency in seconds at which the Orb will push scores to the MQTT
       broker.
+  mqtt_host:
+    name: MQTT Host
+    description: >-
+      Not required if using auto-discovery (default). The hostname or IP address of the MQTT broker to which the Orb will push scores.
+  mqtt_port:
+    name: MQTT Port
+    description: >-
+      Not required if using auto-discovery (default). The port number of the MQTT broker to which the Orb will push scores.
+  mqtt_user:
+    name: MQTT Username
+    description: >-
+      Not required if using auto-discovery (default). The username for authenticating with the MQTT broker.
+  mqtt_password:
+    name: MQTT Password
+    description: >-
+      Not required if using auto-discovery (default). The password for authenticating with the MQTT broker.
