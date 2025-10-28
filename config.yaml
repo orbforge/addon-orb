@@ -17,9 +17,11 @@ services:
 options:
   mqtt_push: false
   mqtt_frequency: 5
+  mqtt_debug: false
 schema:
   mqtt_push: bool
   mqtt_frequency: int(1,120)
+  mqtt_debug: bool
   mqtt_host: str?
   mqtt_port: port?
   mqtt_user: str?

@@ -9,6 +9,10 @@ configuration:
     description: >-
       The frequency in seconds at which the Orb will push scores to the MQTT
       broker.
+  mqtt_debug:
+    name: Enable Debug Logging
+    description: >-
+      If set to `true`, debug logging will be enabled for MQTT operations.
   mqtt_host:
     name: MQTT Host
     description: >-
