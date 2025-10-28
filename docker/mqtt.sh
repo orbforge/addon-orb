@@ -15,7 +15,7 @@ fi
 # if MQTT_HOST is set in environment variables, use environment variables
 if [ -n "$MQTT_HOST" ]; then
   echo "Using MQTT configuration from environment variables"
-else if [ -n "$_MQTT_HOST" ]; then
+elif [ -n "$_MQTT_HOST" ]; then
   echo "Using MQTT configuration from options.json"
   if [ "$DEBUG_MODE" == "true" ]; then
     echo "MQTT settings from options.json:"
