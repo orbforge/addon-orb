@@ -7,7 +7,11 @@ date
 
 # Start MQTT publishing in the background
 CONFIG_PATH=/data/options.json
-MQTT_PUSH=$(jq -r '.mqtt_push // false' $CONFIG_PATH)
+if [ -n "$MQTT_PUSH" ]; then
+  echo "Using MQTT_PUSH from environment variables"
+else
+  MQTT_PUSH=$(jq -r '.mqtt_push // false' $CONFIG_PATH)
+fi
 
 if [ "$MQTT_PUSH" == "true" ]; then
   echo "MQTT Push is enabled"
