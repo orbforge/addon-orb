@@ -3,13 +3,17 @@
 AUTH_HEADER="Authorization: Bearer ${SUPERVISOR_TOKEN}"
 
 CONFIG_PATH=/data/options.json
-MQTT_PAUSE=$(jq -r '.mqtt_frequency // 5' $CONFIG_PATH)
 _MQTT_HOST=$(jq -r '.mqtt_host // empty' $CONFIG_PATH)
 # if DEBUG_MODE is set in environment variables, use environment variables, otherwise use config
 if [ -n "$DEBUG_MODE" ]; then
   echo "Using DEBUG_MODE from environment variables"
 else
   DEBUG_MODE=$(jq -r '.mqtt_debug // false' $CONFIG_PATH)
+fi
+if [ -n "$MQTT_PAUSE" ]; then
+  echo "Using MQTT_PAUSE from environment variables"
+else
+  MQTT_PAUSE=$(jq -r '.mqtt_frequency // 5' $CONFIG_PATH)
 fi
 
 # if MQTT_HOST is set in environment variables, use environment variables
