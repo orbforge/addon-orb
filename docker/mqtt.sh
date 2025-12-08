@@ -63,16 +63,16 @@ STATE_TOPIC="orb_homeassistant/status"
 
 # Publish MQTT Discovery message once (retained)
 mapping="
-Score|orb_score.display|%
-Bandwidth Score|orb_score.components.bandwidth_score.display|%
-Bandwidth Upload|orb_score.components.bandwidth_score.components.upload_bandwidth_kbps.value|kbps
-Bandwidth Download|orb_score.components.bandwidth_score.components.download_bandwidth_kbps.value|kbps
-Reliability Score|orb_score.components.reliability_score.display|%
-Lag|orb_score.components.responsiveness_score.components.internet_lag_us.value|us
-Responsiveness Score|orb_score.components.responsiveness_score.display|%
+Score|orb_score.display|orb_score.display|%
+Bandwidth Score|orb_score.components.bandwidth_score.display|orb_score.components.bandwidth_score|%
+Bandwidth Upload|orb_score.components.bandwidth_score.components.upload_bandwidth_kbps.value|orb_score.components.bandwidth_score|kbps
+Bandwidth Download|orb_score.components.bandwidth_score.components.download_bandwidth_kbps.value|orb_score.components.bandwidth_score|kbps
+Reliability Score|orb_score.components.reliability_score.display|orb_score.components.reliability_score|%
+Lag|orb_score.components.responsiveness_score.components.internet_lag_us.value|orb_score.components.responsiveness_score|us
+Responsiveness Score|orb_score.components.responsiveness_score.display|orb_score.components.responsiveness_score|%
 "
 
-echo "$mapping" | while IFS='|' read name field unit; do
+echo "$mapping" | while IFS='|' read name field defined unit; do
   # Skip empty lines
   [ -z "$name" ] && continue
 
@@ -86,7 +86,7 @@ echo "$mapping" | while IFS='|' read name field unit; do
   "state_class": "measurement",
   "state_topic": "${STATE_TOPIC}",
   "unit_of_measurement": "${unit}",
-  "value_template": "{{ (value_json.${field} | default(0) | float(0)) | round(0) }}",
+  "value_template": "{{ (value_json.${field} | float(0) | round(0)) if value_json.${defined} is defined else 0 }}",
   "unique_id": "${unique_id}",
   "device": {
     "identifiers": ["orb"],
