@@ -86,7 +86,7 @@ echo "$mapping" | while IFS='|' read name field unit; do
   "state_class": "measurement",
   "state_topic": "${STATE_TOPIC}",
   "unit_of_measurement": "${unit}",
-  "value_template": "{{ (value_json.${field}) | round(0) }}",
+  "value_template": "{{ (value_json.${field} | default(0) | float(0)) | round(0) }}",
   "unique_id": "${unique_id}",
   "device": {
     "identifiers": ["orb"],
