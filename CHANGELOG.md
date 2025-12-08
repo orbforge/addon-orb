@@ -1,5 +1,8 @@
 # Changelog
 
+# 1.3.9
+- Protection against missing values, for example if the speed tests are turned off.
+
 # 1.3.6
 - Optimization: start up time to measurement
 - Bug fixes and optimizations
