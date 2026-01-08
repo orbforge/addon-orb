@@ -1,5 +1,9 @@
 # Changelog
 
+# 1.4.0
+- ICMP testing is removed from the measurement protocol by default for responsiveness and reliability. ICMP measurements can be re-enabled through an environment variable (ORB_INTERNET_ENABLE_ICMP) in configuration. Read more about this change in our blog.
+- Ephemeral Mode is now supported allowing the Orb sensor to better preserve the flash by not writing to disk. This will benefit flash-based devices like Raspberry Pis, however, note that stats will not persist when the device reboots or Orb stops running. This mode must be enabled through an environment variable (ORB_EPHEMERAL_MODE).
+
 # 1.3.9
 - Protection against missing values, for example if the speed tests are turned off.
 
