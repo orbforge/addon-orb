@@ -1,6 +1,6 @@
 name: "Orb"
 description: "Orb sensor to continuously monitor network responsiveness and reliability."
-version: "1.4.4"
+version: "1.4.7"
 slug: "orb_homeassistant"
 init: false
 host_network: true
