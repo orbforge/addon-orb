@@ -1,44 +1,47 @@
 # Changelog
 
-# 1.4.3
+## Orb Sensor Changelog
+Visit https://orb.net/the-forge/changelog#cli for changes in the most recent Orb Sensor releases.
+
+## 1.4.3
 - Orb 1.4.3: https://orb.net/the-forge/changelog/linux_cli-1.4.2
 
-# 1.4.0
+## 1.4.0
 - ICMP testing is removed from the measurement protocol by default for responsiveness and reliability. ICMP measurements can be re-enabled through an environment variable (ORB_INTERNET_ENABLE_ICMP) in configuration. Read more about this change in our blog.
 - Ephemeral Mode is now supported allowing the Orb sensor to better preserve the flash by not writing to disk. This will benefit flash-based devices like Raspberry Pis, however, note that stats will not persist when the device reboots or Orb stops running. This mode must be enabled through an environment variable (ORB_EPHEMERAL_MODE).
 
-# 1.3.9
+## 1.3.9
 - Protection against missing values, for example if the speed tests are turned off.
 
-# 1.3.6
+## 1.3.6
 - Optimization: start up time to measurement
 - Bug fixes and optimizations
 - Support manually configuring the MQTT push to HA via environment variables or optional configuration options
 
-# 1.3.3
+## 1.3.3
 - Add state_class: measurement to have long term statistics. Thanks @tronikos
 - Remove high packet loss proportion from MQTT script, since it's no longer available in the orb summary and was causing errors inside Home Assistant
 - Improved Router Lag measurement
 - Bug fixes and optimizations
 
-# 1.3.1
+## 1.3.1
 - Fix potential disconnected startup failure cases
 - Fix rare latency measurement beyond timeout
 - Bug fixes and optimizations
 - Local Analytics: https://orb.net/blog/introducing-local-api
 
-# 1.3.0
+## 1.3.0
 - Bug fixes and optimizations
 - Support for Orb app 1.3 features: https://orb.net/blog/whats-new-in-orb-1.3
 
-# 1.2.2
+## 1.2.2
 - Bug fixes and optimizations
 
-# 1.2.1
+## 1.2.1
 - Bug: Fixed a bug where lag would spike incorrectly at launch in some edge cases
 - Minor bug fixes and optimizations
 
-# 1.2.0
+## 1.2.0
 - Scoring improvements: Reliability and Speed will affect your overall Orb Score a bit differently than before.
     - Reliability will only impact your score in cases of outages or disruptions, and we now include the most recent speed test even if it happened before the time period you are viewing. You may notice your score is a bit lower than before, but it is more representative of your actual Internet experience.
 - Support for configurable speed testing
