@@ -32,14 +32,14 @@ Visit https://orb.net/the-forge/changelog#cli for changes in the most recent Orb
 - Bug fixes and optimizations
 - Local Analytics: https://orb.net/blog/introducing-local-api
 
-## 1.3.0
+### 1.3.0
 - Bug fixes and optimizations
 - Support for Orb app 1.3 features: https://orb.net/blog/whats-new-in-orb-1.3
 
-## 1.2.2
+### 1.2.2
 - Bug fixes and optimizations
 
-## 1.2.1
+### 1.2.1
 - Bug: Fixed a bug where lag would spike incorrectly at launch in some edge cases
 - Minor bug fixes and optimizations
 
