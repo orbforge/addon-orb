@@ -109,15 +109,19 @@ for entity in $CLEANUP_ENTITIES; do
     -t "$DISCOVERY_TOPIC" -n -r
 done
 
-# Periodic state updates
+# mosquitto_pub -l keeps the connection open and publishes each line of input, outer loop
+# reconnects on drop, use keep-alive larger than MQTT_PAUSE to avoid needless pings.
 while true; do
-  # Replace this with your real data source
-  ORB_OUTPUT="$(/app/orb summary || echo '{}')"
-  #echo "ORB_OUTPUT: $ORB_OUTPUT"
+  while true; do
+    # sleep first to avoid publishing zeroes on first iteration
+    sleep "$MQTT_PAUSE"
 
-  # Publish Orb Summary to MQTT
-  mosquitto_pub -h "$MQTT_HOST" -p "$MQTT_PORT" -u "$MQTT_USER" -P "$MQTT_PASS" \
-    -t "$STATE_TOPIC" -m "$ORB_OUTPUT" -r
+    # output a single line to mosquitto_pub
+    (/app/orb summary || echo '{}') | jq -c .
 
-  sleep "$MQTT_PAUSE"
+  done | mosquitto_pub -h "$MQTT_HOST" -p "$MQTT_PORT" -u "$MQTT_USER" -P "$MQTT_PASS" \
+    -t "$STATE_TOPIC" -l -r -k $((MQTT_PAUSE * 2))
+
+  echo "mosquitto_pub disconnected, reconnecting..."
 done
+
