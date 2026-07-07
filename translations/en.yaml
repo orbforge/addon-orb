@@ -13,6 +13,12 @@ configuration:
     name: Enable Debug Logging
     description: >-
       If set to `true`, debug logging will be enabled for MQTT operations.
+  ephemeral_mode:
+    name: Ephemeral Mode
+    description: >-
+      If set to `true`, Orb will avoid writing runtime data to disk. Enable
+      this for flash-based devices where reducing write cycles matters; data
+      will not persist across restarts.
   mqtt_host:
     name: MQTT Host
     description: >-
