@@ -109,6 +109,17 @@ for entity in $CLEANUP_ENTITIES; do
     -t "$DISCOVERY_TOPIC" -n -r
 done
 
+# orb summary logs its startup banner to stderr on every invocation; only
+# stdout carries the JSON payload jq needs. That banner repeating every
+# MQTT_PAUSE seconds floods the host's journal, so route it to /dev/null by
+# default -- but keep it when mqtt_debug is on, since debugging should show
+# the child process's own logs rather than silently dropping them.
+if [ "$DEBUG_MODE" = "true" ]; then
+  exec 3>&2
+else
+  exec 3>/dev/null
+fi
+
 # mosquitto_pub -l keeps the connection open and publishes each line of input, outer loop
 # reconnects on drop, use keep-alive larger than MQTT_PAUSE to avoid needless pings.
 while true; do
@@ -117,10 +128,7 @@ while true; do
     sleep "$MQTT_PAUSE"
 
     # output a single line to mosquitto_pub
-    # orb summary logs its startup banner to stderr on every invocation; only
-    # stdout carries the JSON payload jq needs, so drop stderr here to avoid
-    # flooding the host's journal with a repeated banner every MQTT_PAUSE seconds
-    (/app/orb summary 2>/dev/null || echo '{}') | jq -c .
+    (/app/orb summary 2>&3 || echo '{}') | jq -c .
 
   done | mosquitto_pub -h "$MQTT_HOST" -p "$MQTT_PORT" -u "$MQTT_USER" -P "$MQTT_PASS" \
     -t "$STATE_TOPIC" -l -r -k $((MQTT_PAUSE * 2))
