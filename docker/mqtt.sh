@@ -117,7 +117,10 @@ while true; do
     sleep "$MQTT_PAUSE"
 
     # output a single line to mosquitto_pub
-    (/app/orb summary || echo '{}') | jq -c .
+    # orb summary logs its startup banner to stderr on every invocation; only
+    # stdout carries the JSON payload jq needs, so drop stderr here to avoid
+    # flooding the host's journal with a repeated banner every MQTT_PAUSE seconds
+    (/app/orb summary 2>/dev/null || echo '{}') | jq -c .
 
   done | mosquitto_pub -h "$MQTT_HOST" -p "$MQTT_PORT" -u "$MQTT_USER" -P "$MQTT_PASS" \
     -t "$STATE_TOPIC" -l -r -k $((MQTT_PAUSE * 2))
