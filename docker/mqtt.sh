@@ -109,17 +109,6 @@ for entity in $CLEANUP_ENTITIES; do
     -t "$DISCOVERY_TOPIC" -n -r
 done
 
-# orb summary logs its startup banner to stderr on every invocation; only
-# stdout carries the JSON payload jq needs. That banner repeating every
-# MQTT_PAUSE seconds floods the host's journal, so route it to /dev/null by
-# default -- but keep it when mqtt_debug is on, since debugging should show
-# the child process's own logs rather than silently dropping them.
-if [ "$DEBUG_MODE" = "true" ]; then
-  exec 3>&2
-else
-  exec 3>/dev/null
-fi
-
 # mosquitto_pub -l keeps the connection open and publishes each line of input, outer loop
 # reconnects on drop, use keep-alive larger than MQTT_PAUSE to avoid needless pings.
 while true; do
@@ -127,8 +116,22 @@ while true; do
     # sleep first to avoid publishing zeroes on first iteration
     sleep "$MQTT_PAUSE"
 
-    # output a single line to mosquitto_pub
-    (/app/orb summary 2>&3 || echo '{}') | jq -c .
+    # output a single line to mosquitto_pub. orb summary prints a startup
+    # banner to stderr on every invocation, which would flood the journal at
+    # MQTT_PAUSE cadence -- so capture stderr in a variable (fd 3 carries the
+    # real stdout out of the command substitution) and only replay it when
+    # orb fails (it's the only diagnostic we have then) or mqtt_debug is on.
+    {
+      ORB_ERRS=$(/app/orb summary 2>&1 >&3)
+      ORB_RC=$?
+      if [ "$ORB_RC" -ne 0 ]; then
+        echo "orb summary failed (exit $ORB_RC):" >&2
+        [ -n "$ORB_ERRS" ] && printf '%s\n' "$ORB_ERRS" >&2
+        echo '{}'
+      elif [ "$DEBUG_MODE" = "true" ] && [ -n "$ORB_ERRS" ]; then
+        printf '%s\n' "$ORB_ERRS" >&2
+      fi
+    } 3>&1 | jq -c .
 
   done | mosquitto_pub -h "$MQTT_HOST" -p "$MQTT_PORT" -u "$MQTT_USER" -P "$MQTT_PASS" \
     -t "$STATE_TOPIC" -l -r -k $((MQTT_PAUSE * 2))
