@@ -63,21 +63,34 @@ STATE_TOPIC="orb_homeassistant/status"
 
 # Publish MQTT Discovery message once (retained)
 mapping="
-Score|orb_score.display|orb_score.display|%
-Bandwidth Score|orb_score.components.bandwidth_score.display|orb_score.components.bandwidth_score|%
-Bandwidth Upload|orb_score.components.bandwidth_score.components.upload_bandwidth_kbps.value|orb_score.components.bandwidth_score|kbps
-Bandwidth Download|orb_score.components.bandwidth_score.components.download_bandwidth_kbps.value|orb_score.components.bandwidth_score|kbps
-Reliability Score|orb_score.components.reliability_score.display|orb_score.components.reliability_score|%
-Lag|orb_score.components.responsiveness_score.components.internet_lag_us.value|orb_score.components.responsiveness_score|us
-Responsiveness Score|orb_score.components.responsiveness_score.display|orb_score.components.responsiveness_score|%
+Score|orb_score.display|%
+Bandwidth Score|orb_score.components.bandwidth_score.display|%
+Bandwidth Upload|orb_score.components.bandwidth_score.components.upload_bandwidth_kbps.value|kbps
+Bandwidth Download|orb_score.components.bandwidth_score.components.download_bandwidth_kbps.value|kbps
+Reliability Score|orb_score.components.reliability_score.display|%
+Lag|orb_score.components.responsiveness_score.components.internet_lag_us.value|us
+Responsiveness Score|orb_score.components.responsiveness_score.display|%
 "
 
-echo "$mapping" | while IFS='|' read name field defined unit; do
+echo "$mapping" | while IFS='|' read name field unit; do
   # Skip empty lines
   [ -z "$name" ] && continue
 
   unique_id=$(echo "$name" | tr '[:upper:]' '[:lower:]' | sed 's/ /_/g')
   DISCOVERY_TOPIC="${DISCOVERY_TOPIC_PREFIX}/orb_${unique_id}/config"
+
+  # Guard every level of the field path. A single "value_json.a.b.c is defined"
+  # still has to look up .b on an undefined .a when the payload has no "a" at
+  # all (e.g. orb summary output before the first score, or the {} published
+  # when orb summary fails), which Home Assistant logs as a template error on
+  # every message. Render None when anything is missing: the MQTT sensor then
+  # reports unknown instead of a fake 0 that pollutes the statistics.
+  guard=""
+  path="value_json"
+  for part in $(echo "$field" | tr '.' ' '); do
+    path="${path}.${part}"
+    guard="${guard:+$guard and }${path} is defined"
+  done
 
 
   payload=$(cat <<EOF
@@ -86,7 +99,7 @@ echo "$mapping" | while IFS='|' read name field defined unit; do
   "state_class": "measurement",
   "state_topic": "${STATE_TOPIC}",
   "unit_of_measurement": "${unit}",
-  "value_template": "{{ (value_json.${field} | float(0) | round(0)) if value_json.${defined} is defined else 0 }}",
+  "value_template": "{{ (value_json.${field} | float(0) | round(0)) if ${guard} else None }}",
   "unique_id": "${unique_id}",
   "device": {
     "identifiers": ["orb"],
