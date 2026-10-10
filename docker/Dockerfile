@@ -6,6 +6,7 @@ RUN apk add --no-cache mosquitto-clients curl jq
 
 # Add scripts
 COPY mqtt.sh /app/mqtt.sh
+COPY mqtt-summary.sh /app/mqtt-summary.sh
 COPY entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/mqtt.sh /app/entrypoint.sh
 
